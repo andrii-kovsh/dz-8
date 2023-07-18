@@ -5,12 +5,13 @@ public class StudentsGroup {
     private Student groupLeader;
     private final List<Student> students;
     private final List<String> tasks;
+    private final List<Boolean> taskStatus;
 
     public StudentsGroup(Student groupLeader) {
-        this.groupLeader = null;
+        this.groupLeader = groupLeader;
         this.students = new ArrayList<>();
         this.tasks = new ArrayList<>();
-        setGroupLeader(groupLeader);
+        this.taskStatus = new ArrayList<>();
     }
 
     public void changeGroupLeader(Student newGroupLeader) {
@@ -27,10 +28,7 @@ public class StudentsGroup {
 
     public void addTask(String task) {
         tasks.add(task);
-    }
-
-    public void markTaskAsCompleted(Student student, String task) {
-        // Логіка позначення завдання як виконаного для зазначеного студента
+        taskStatus.add(false);
     }
 
     public boolean hasGroupLeader() {
@@ -49,9 +47,41 @@ public class StudentsGroup {
         for (Student student : students) {
             System.out.println("- " + student.getFirstName() + " " + student.getLastName() + " (ID: " + student.getId() + ")");
         }
-        System.out.println("Задачі:");
-        for (String task : tasks) {
-            System.out.println("- " + task);
+    }
+
+    public void markTaskAsCompleted(Student student, String task) {
+        int studentIndex = students.indexOf(student);
+        int taskIndex = tasks.indexOf(task);
+            if (studentIndex != -1 && taskIndex != -1) {
+                taskStatus.set(taskIndex, true);
+            }
+    }
+
+    public void displayCompletedTasks() { // Метод для виводу виконаних завдань і виконавця
+        System.out.println("Виконані завдання:");
+        for (int i = 0; i < tasks.size(); i++) {
+            String task = tasks.get(i);
+            boolean status = taskStatus.get(i);
+            if (status) {
+                Student student = students.get(i);
+                System.out.println("- " + task + ": Виконано студентом " + student.getFirstName() + " " + student.getLastName());
+            }
+        }
+    }
+
+    public void displayNotCompletedTasks() { // Метод для виводу невиконаних завдань
+        System.out.println("Не виконані завдання:");
+        boolean allTasksCompleted = true; // Змінна для визначення, чи всі завдання виконані
+
+        for (int i = 0; i < tasks.size(); i++) {
+            if (!taskStatus.get(i)) {
+                System.out.println("- \"" + tasks.get(i) + "\"");
+                allTasksCompleted = false;
+            }
+        }
+
+        if (allTasksCompleted) {
+            System.out.println("Всі завдання виконані");
         }
     }
 }

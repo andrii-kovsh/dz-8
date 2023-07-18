@@ -13,7 +13,17 @@ public class Main {
 
         studentsGroup.addTask("Не наткнутись на виключення в коді");
         studentsGroup.addTask("Вивчити цикли: for, while, for each");
+        studentsGroup.addTask("Вивчити цикл while");
+        studentsGroup.addTask("Написати \"Hello World\"");
+
+        studentsGroup.markTaskAsCompleted(student3, "Не наткнутись на виключення в коді");
+        studentsGroup.markTaskAsCompleted(student2, "Вивчити цикли: for, while, for each");
+        studentsGroup.markTaskAsCompleted(student3, "Вивчити цикл while");
 
         studentsGroup.displayGroupDetails();
+        System.out.println();
+        studentsGroup.displayCompletedTasks();
+        System.out.println();
+        studentsGroup.displayNotCompletedTasks();
     }
 }
