@@ -1,87 +1,59 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class StudentsGroup {
-    private Student groupLeader;
+    private final Student groupLeader;
     private final List<Student> students;
+    private final Map<String, Student> completedTasks;
     private final List<String> tasks;
-    private final List<Boolean> taskStatus;
 
     public StudentsGroup(Student groupLeader) {
         this.groupLeader = groupLeader;
         this.students = new ArrayList<>();
+        this.completedTasks = new HashMap<>();
         this.tasks = new ArrayList<>();
-        this.taskStatus = new ArrayList<>();
-    }
-
-    public void changeGroupLeader(Student newGroupLeader) {
-        setGroupLeader(newGroupLeader);
     }
 
     public void addStudent(Student student) {
         students.add(student);
     }
 
-    public void removeStudent(Student student) {
-        students.remove(student);
-    }
-
     public void addTask(String task) {
         tasks.add(task);
-        taskStatus.add(false);
     }
 
-    public boolean hasGroupLeader() {
-        return groupLeader != null;
-    }
-
-    private void setGroupLeader(Student newGroupLeader) {
-        if (newGroupLeader != null) {
-            this.groupLeader = newGroupLeader;
+    public void markTaskAsCompleted(Student student, String task) {
+        if (students.contains(student) && tasks.contains(task)) {
+            completedTasks.put(task, student);
         }
     }
 
     public void displayGroupDetails() {
-        System.out.println("Староста: " + groupLeader.getFirstName() + " " + groupLeader.getLastName());
-        System.out.println("Студенти:");
+        System.out.println("Староста групи: " + groupLeader.getFirstName() + " " + groupLeader.getLastName());
+        System.out.println("Список студентів:");
         for (Student student : students) {
-            System.out.println("- " + student.getFirstName() + " " + student.getLastName() + " (ID: " + student.getId() + ")");
+            System.out.println("- " + student.getFirstName() + " " + student.getLastName());
         }
     }
 
-    public void markTaskAsCompleted(Student student, String task) {
-        int studentIndex = students.indexOf(student);
-        int taskIndex = tasks.indexOf(task);
-            if (studentIndex != -1 && taskIndex != -1) {
-                taskStatus.set(taskIndex, true);
-            }
-    }
-
-    public void displayCompletedTasks() { // Метод для виводу виконаних завдань і виконавця
+    public void displayCompletedTasks() {
         System.out.println("Виконані завдання:");
-        for (int i = 0; i < tasks.size(); i++) {
-            String task = tasks.get(i);
-            boolean status = taskStatus.get(i);
-            if (status) {
-                Student student = students.get(i);
+        for (String task : tasks) {
+            if (completedTasks.containsKey(task)) {
+                Student student = completedTasks.get(task);
                 System.out.println("- " + task + ": Виконано студентом " + student.getFirstName() + " " + student.getLastName());
             }
         }
     }
 
-    public void displayNotCompletedTasks() { // Метод для виводу невиконаних завдань
-        System.out.println("Не виконані завдання:");
-        boolean allTasksCompleted = true; // Змінна для визначення, чи всі завдання виконані
-
-        for (int i = 0; i < tasks.size(); i++) {
-            if (!taskStatus.get(i)) {
-                System.out.println("- \"" + tasks.get(i) + "\"");
-                allTasksCompleted = false;
+    public void displayNotCompletedTasks() {
+        System.out.println("Невиконані завдання:");
+        for (String task : tasks) {
+            if (!completedTasks.containsKey(task)) {
+                System.out.println("- " + task);
             }
-        }
-
-        if (allTasksCompleted) {
-            System.out.println("Всі завдання виконані");
         }
     }
 }
