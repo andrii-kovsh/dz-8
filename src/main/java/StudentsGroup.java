@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 public class StudentsGroup {
-    private final Student groupLeader;
+    private Student groupLeader;
     private final List<Student> students;
     private final Map<String, Student> completedTasks;
     private final List<String> tasks;
@@ -22,6 +22,16 @@ public class StudentsGroup {
 
     public void addTask(String task) {
         tasks.add(task);
+    }
+
+    private void setGroupLeader(Student newGroupLeader) {
+        if (newGroupLeader != null) {
+            this.groupLeader = newGroupLeader;
+        }
+    }
+
+    public void removeStudent(Student student) {
+        students.remove(student);
     }
 
     public void markTaskAsCompleted(Student student, String task) {
