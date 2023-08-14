@@ -6,7 +6,7 @@ import java.util.Map;
 public class StudentsGroup {
     private Student groupLeader;
     private final List<Student> students;
-    private final Map<String, Student> completedTasks;
+    private final Map<String, List<Student>> completedTasks;
     private final List<String> tasks;
 
     public StudentsGroup(Student groupLeader) {
@@ -17,26 +17,40 @@ public class StudentsGroup {
     }
 
     public void addStudent(Student student) {
+
         students.add(student);
     }
 
     public void addTask(String task) {
+
         tasks.add(task);
     }
 
     private void setGroupLeader(Student newGroupLeader) {
-        if (newGroupLeader != null) {
+        if (newGroupLeader != null && !students.contains(newGroupLeader)) {
             this.groupLeader = newGroupLeader;
         }
     }
 
+
     public void removeStudent(Student student) {
-        students.remove(student);
+        if (student != null) {
+            if (student.equals(groupLeader)) {
+                System.out.println("Старосту групи не можна видалити!");
+                return;
+            }
+
+            students.remove(student);
+            // При видаленні студента також видаляємо його з виконаних завдань
+            for (List<Student> studentsList : completedTasks.values()) {
+                studentsList.remove(student);
+            }
+        }
     }
 
     public void markTaskAsCompleted(Student student, String task) {
         if (students.contains(student) && tasks.contains(task)) {
-            completedTasks.put(task, student);
+            completedTasks.computeIfAbsent(task, key -> new ArrayList<>()).add(student);
         }
     }
 
@@ -50,11 +64,14 @@ public class StudentsGroup {
 
     public void displayCompletedTasks() {
         System.out.println("Виконані завдання:");
-        for (String task : tasks) {
-            if (completedTasks.containsKey(task)) {
-                Student student = completedTasks.get(task);
-                System.out.println("- " + task + ": Виконано студентом " + student.getFirstName() + " " + student.getLastName());
+        for (Map.Entry<String, List<Student>> entry : completedTasks.entrySet()) {
+            String task = entry.getKey();
+            List<Student> studentsList = entry.getValue();
+            System.out.print("- " + task + ": Виконано студентами: ");
+            for (Student student : studentsList) {
+                System.out.print(student.getFirstName() + " " + student.getLastName() + ", ");
             }
+            System.out.println();
         }
     }
 

@@ -18,6 +18,7 @@ public class Main {
 
         studentsGroup.markTaskAsCompleted(student3, "Не наткнутись на виключення в коді");
         studentsGroup.markTaskAsCompleted(student2, "Вивчити цикли: for, while, for each");
+        studentsGroup.markTaskAsCompleted(student1, "Вивчити цикли: for, while, for each");
         studentsGroup.markTaskAsCompleted(student1, "Вивчити цикл while");
 
         studentsGroup.displayGroupDetails();
