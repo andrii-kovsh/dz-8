@@ -27,9 +27,11 @@ public class StudentsGroup {
     }
 
     private void setGroupLeader(Student newGroupLeader) {
-        if (newGroupLeader != null && !students.contains(newGroupLeader)) {
-            this.groupLeader = newGroupLeader;
-        }
+        if (newGroupLeader == null)
+            throw new RuntimeException("Group leader can't be null");
+        this.groupLeader = newGroupLeader;
+        if (!students.contains(newGroupLeader))
+            students.add(newGroupLeader);
     }
 
 
